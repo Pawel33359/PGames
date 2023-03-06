@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <!-- FAVICON -->
+    <link rel="apple-touch-icon" sizes="180x180" href="./img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./img/favicon-16x16.png">
+    <link rel="manifest" href="./site.webmanifest">
+
+    <!-- FONT -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=VT323&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css" />
+    
+    <!-- ICONS -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    
+    <!-- JS -->
+    <script type="module" src="index.js"></script>
+    
+    <title>PGames</title>
+  </head>
+  <body>
+    <!-- MENU -->
+    <div id="menu">
+      <div class="title">PGAMES</div>
+      <!-- GAME OVER -->
+    <div class="menu-game-over">
+    </div>
+      <div class="highscore">
+        <div class="score">
+          SNAKE HIGHSCORE: <span id="snake-highscore">0</span>
+        </div>
+        <!-- <div class="score">
+          TETRIS HIGHSCORE: <span id="tetris-highscore">0</span>
+        </div> -->
+      </div>
+      <div class="menu-games center-lr">
+        <button id="btn-snake" class="menu-btn btn">SNAKE</button>
+        <!-- <button id="btn-tetris" class="menu-btn btn">TETRIS</button> -->
+      </div>
+    </div>
+
+    <!-- GAME -->
+    <div id="game" class="hidden">
+      <div class="game-screen">
+        <div class="game-score score"></div>
+        <div class="game-map center-lr"></div>
+      </div>
+      <div class="game-controls controls">
+        
+        <!-- INSTRUCTIONS -->
+        <div class="controls-keys">
+          <span id="up-instruction"></span>: W / <ion-icon name="arrow-up-outline"></ion-icon>
+          </br>
+          MOVE LEFT: A / <ion-icon name="arrow-back-outline"></ion-icon>
+          </br>
+          <span id="down-instruction"></span>: S / <ion-icon name="arrow-down-outline"></ion-icon>
+          </br>
+          MOVE RIGHT: D / <ion-icon name="arrow-forward-outline"></ion-icon>
+          </br>
+          PAUSE: SPACEBAR
+          </br>
+          CHANGE SPEED: R
+        </div>
+
+        <div class="controls-buttons">
+          <div>
+            <!-- SPEED BUTTONS -->
+            <div class="controls-description">CHANGE SPEED:</div>
+            
+            <button id="speed-btn" class="controls-btn btn center-lr">
+              <ion-icon name="play-circle-outline"></ion-icon>
+            </button>
+          </div>
+
+          <div>
+            <!-- MOVEMENT BUTTONS AND PAUSE BUTTON -->
+            <div class="controls-description">BUTTONS:</div>
+  
+            <button id="up-btn" class="controls-btn direction-btn btn center-lr">
+              <!-- <ion-icon name="arrow-up-outline"></ion-icon> -->
+              <!-- <ion-icon name="return-up-forward-outline"></ion-icon> -->
+            </button>
+            <button id="left-btn" class="controls-btn direction-btn btn"><ion-icon name="arrow-back-outline"></ion-icon></button>
+  
+            <button id="pause-btn" class="controls-btn btn"><ion-icon name="pause-outline"></ion-icon></button>
+            
+            <button id="right-btn" class="controls-btn direction-btn btn"><ion-icon name="arrow-forward-outline"></ion-icon></button>
+            <button id="down-btn" class="controls-btn direction-btn btn center-lr">
+              <!-- <ion-icon name="arrow-down-outline"></ion-icon> -->
+              <!-- <ion-icon name="return-up-back-outline"></ion-icon> -->
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAUSE -->
+    <div class="pause hidden">
+     <span class="desktop-only-message">PRESS SPACE/</span> 
+      CLICK ON SCREEN TO CONTINUE</div>
+    <!-- TO FIX WHEN ELEMENTS BIGGER THAN SCREEN -->
+    <div class="overlay hidden"></div>
+  </body>
+</html>
