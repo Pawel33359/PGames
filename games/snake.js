@@ -26,12 +26,11 @@ export default class Snake extends Game {
   }
 
   ////////////////////////////////////////////////////////////////
-  startSnake() {
+  // Building on top of parent method
+  prepareGame() {
     // 1) PREPARE HTML AND CONTROLS FOR GAME
-    this.prepareGame(
-      this.handleSnakeControls.bind(this),
-      this.handleSnakeMovement.bind(this)
-    );
+    super.prepareGame();
+    this.setInstructionsAndButtons();
 
     // 2) SET SNAKE, AND APPLE
     this.setSnakeInitialPosition();
@@ -40,26 +39,38 @@ export default class Snake extends Game {
     // 3) GIVE DISABLED CLASS TO BUTTON=SNAKENECK AND DIRECTIONARROW TO SNAKE HEAD
     this.setDisabledButtonStyle();
     this.setSnakeArrowIcon();
-
-    // // 4) START GAME
-    // this.startGame(NORMAL_SPEED);
   }
 
   ////////////////////////////////////////////////////////////////
   // GAME LOGIC
 
-  // SET SNAKE DIRECTION DEPENDING WHAT WAS CLICKED
-  handleSnakeControls(selectedDirection) {
-    // 2) CHECK IF USER DIDN'T CHOOSE TO GO BACKWARDS
-    if (selectedDirection === this.#snakeNeckDirection) return;
+  // CHECK WHICH BUTTON/KEY WAS CLICKED ON
+  checkClicked(clicked, pause, speed) {
+    // 1) GET METHOD FROM PARENT CLASS AND BUILD ON TOP OF THAT
+    super.checkClicked(clicked, pause, speed);
 
-    // 3) SET NEW MOVEMENT DIRECTION
-    this.#direction = selectedDirection;
-    this.setSnakeArrowIcon();
+    if (!this.isPaused) {
+      // 2) GET STRING FOR SELECTED DIRECTION AND PUT CORRECT DIRECTION BASED ON CLICKED ELEMENT
+      let selectedDirection;
+
+      if (this.upMovementControls.includes(clicked)) selectedDirection = "up";
+      else if (this.leftMovementControls.includes(clicked))
+        selectedDirection = "left";
+      else if (this.downMovementControls.includes(clicked))
+        selectedDirection = "down";
+      else if (this.rightMovementControls.includes(clicked))
+        selectedDirection = "right";
+      else return;
+      // 3) CHECK IF USER DIDN'T CHOOSE TO GO BACKWARDS
+      if (selectedDirection === this.#snakeNeckDirection) return;
+
+      // 4) SET NEW MOVEMENT DIRECTION
+      this.#direction = selectedDirection;
+      this.setSnakeArrowIcon();
+    }
   }
-
   // MOVE ONE TICK
-  handleSnakeMovement() {
+  handleMovement() {
     // 1) MAKE SURE GAME ISNT PAUSED
     if (this.isPaused) return;
 
@@ -123,16 +134,20 @@ export default class Snake extends Game {
       +y < 0 ||
       headlessSnake.includes(this.#snake[0])
     ) {
-      // 4c) SET ALL OPTIONS TO DEFAULT
-      this.#snake = [];
-      this.#apple = undefined;
-      this.#direction = "right";
-      this.#snakeNeckDirection = "left";
-      // 4d) CALL endGame() FROM GAME CLASS
+      // 4c) END GAME
       this.endGame();
       return true;
     }
     return false;
+  }
+
+  endGame() {
+    super.endGame();
+    // 1) SET ALL SNAKE OPTIONS TO DEFAULT
+    this.#snake = [];
+    this.#apple = undefined;
+    this.#direction = "right";
+    this.#snakeNeckDirection = "left";
   }
   ////////////////////////////////////////////////////////////////
   // POSITION X,Y
@@ -178,6 +193,14 @@ export default class Snake extends Game {
 
   ////////////////////////////////////////////////////////////////
   // SET STYLE (HTML/CSS)
+  setInstructionsAndButtons() {
+    super.setInstructionsAndButtons(
+      "MOVE UP",
+      "MOVE DOWN",
+      '<ion-icon name="arrow-up-outline"></ion-icon>',
+      '<ion-icon name="arrow-down-outline"></ion-icon>'
+    );
+  }
 
   setSnakeBodyStyle(newBodyPosition) {
     // 1) GET SNAKE BODY PART ELEMENT FROM DOM

@@ -233,6 +233,32 @@ button {
   border-right: 0.5rem solid #267334;
 }
 
+/* TETRIS */
+.tetris-map {
+  /* grid-template-columns: repeat(10, 1fr); */
+  grid-template-columns: repeat(10, 3.5rem);
+  grid-template-rows: repeat(20, 3.5rem);
+}
+
+/* TETRIS COLORS*/
+.tetris-red {
+  background-color: #fa5252;
+}
+.tetris-purple {
+  background-color: #be4bdb;
+}
+.tetris-blue {
+  background-color: #228be6;
+}
+.tetris-green {
+  background-color: #40c057;
+}
+.tetris-yellow {
+  background-color: #fab005;
+}
+.tetris-orange {
+  background-color: #fd7e14;
+}
 /* CONTROLS */
 .controls {
   margin: auto 10rem;
@@ -257,8 +283,6 @@ button {
 .controls-btn {
   font-size: 3rem;
   padding: 1.6rem;
-  /* border: 2px solid #40c057;
-  /* color: #40c057; */
   background-color: #1f2326;
   cursor: pointer;
 }
@@ -278,12 +302,12 @@ button {
 /* To disable style for btn */
 .controls-disabled {
   cursor: default;
-  background-color: #aeb0b3;
+  background-color: #85898c;
   border: 2px solid #1a4d23;
   color: #1a4d23;
 }
 .controls-disabled:hover {
-  background-color: #aeb0b3;
+  background-color: #85898c;
   border: 2px solid #1a4d23;
   color: #1a4d23;
 }
@@ -429,7 +453,7 @@ button {
 /*448px height*/
 @media (max-height: 30em) {
   #menu {
-    padding: 2.4rem;
+    padding: 1.2rem;
   }
   .title {
     font-size: 8rem;
@@ -439,6 +463,10 @@ button {
   }
   .menu-game-over {
     font-size: 3rem;
+  }
+  .menu-games {
+    margin-top: 2.4rem;
+    gap: 1.6rem;
   }
   .menu-btn {
     font-size: 2.4rem;

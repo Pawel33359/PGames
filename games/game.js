@@ -1,21 +1,20 @@
-import { NORMAL_SPEED, FAST_SPEED, SNAKE } from "../config.js";
+import { NORMAL_SPEED, FAST_SPEED } from "../config.js";
 
 export default class Game {
   score = 0; //Field holding current score
 
   // Fields holdin info about pause and current speed
   isPaused = false;
-  #fastSpeed = false;
+  #ifFastSpeed = false;
 
-  #handleGameControlsFn; // Field holding Child's class handlecontrolsfunction
-  #handleGameMovementFn; // Field holding Child's class handlemovementfunction
-  #gameIntervalFunction; // Field holding setIntervalFunction so that it can be cleared
+  // Field holding Interval function so that it can be removed later
+  #gameIntervalFunction;
 
   // Fields holding all movement controls names
-  #upMovementControls = ["w", "up-btn", "ArrowUp"];
-  #downMovementControls = ["s", "ArrowDown", "down-btn"];
-  #leftMovementControls = ["a", "ArrowLeft", "left-btn"];
-  #rightMovementControls = ["d", "ArrowRight", "right-btn"];
+  upMovementControls = ["w", "up-btn", "ArrowUp"];
+  downMovementControls = ["s", "ArrowDown", "down-btn"];
+  leftMovementControls = ["a", "ArrowLeft", "left-btn"];
+  rightMovementControls = ["d", "ArrowRight", "right-btn"];
 
   // Fields holding document dom elements to not query for them multiple times
   #gameEl = document.getElementById("game");
@@ -27,14 +26,13 @@ export default class Game {
 
   #pauseEl = document.querySelector(".pause");
   #overlayEl = document.querySelector(".overlay");
-
-  #upInstructionEl = document.getElementById("up-instruction");
-  #downInstructionEl = document.getElementById("down-instruction");
-  #upBtnEl = document.getElementById("up-btn");
-  #downBtnEl = document.getElementById("down-btn");
   #speedBtnEl = document.getElementById("speed-btn");
-
   #gameOverEl = document.querySelector(".menu-game-over");
+
+  upInstructionEl = document.getElementById("up-instruction");
+  downInstructionEl = document.getElementById("down-instruction");
+  upBtnEl = document.getElementById("up-btn");
+  downBtnEl = document.getElementById("down-btn");
 
   constructor(x, y, game) {
     // 1) GET MAP SIZE AND SHAPE TO BE GENERATED
@@ -47,21 +45,16 @@ export default class Game {
     this.boundListenToKeys = this.listenToKeys.bind(this);
     this.boundPauseGame = this.pauseGame.bind(this);
   }
-  prepareGame(handleGameControlsFn, handleGameMovementFn) {
-    // 1) PUT GAME FUNCTIONS AS CLASS PROPERTY TO AVOID PASSING DOWN THROUGH MULTIPLE FUNCTIONS
-    this.#handleGameControlsFn = handleGameControlsFn;
-    this.#handleGameMovementFn = handleGameMovementFn;
-
-    // 2) TAKE CARE OF VISUAL SETUP
+  prepareGame() {
+    // 1) TAKE CARE OF VISUAL SETUP
     this.toggleHidden();
     this.generateMap();
     this.insertScore();
-    this.setInstructionsAndButtons();
 
-    // 3) ATTACH EVENT LISTENERS TO CONTROLS
+    // 2) ATTACH EVENT LISTENERS TO CONTROLS
     this.attachListeners();
 
-    // 4) START GAME
+    // 3) START GAME
     this.startGame(NORMAL_SPEED);
   }
 
@@ -72,7 +65,7 @@ export default class Game {
     this.#gameEl.classList.toggle("hidden");
   }
 
-  // Generate game tiles in game map element and give them data
+  // GENERATE GAME TILES AND GIVE THEM DATA
   generateMap() {
     this.#mapEl.classList.add(`${this.game}-map`);
 
@@ -91,17 +84,18 @@ export default class Game {
     this.#scoreEl.innerHTML = `SCORE: ${this.score}`;
   }
 
-  setInstructionsAndButtons() {
-    if (this.game === SNAKE) {
-      this.#upInstructionEl.innerHTML = "MOVE UP";
-      this.#downInstructionEl.innerHTML = "MOVE DOWN";
-
-      this.#upBtnEl.innerHTML = '<ion-icon name="arrow-up-outline"></ion-icon>';
-      this.#downBtnEl.innerHTML =
-        '<ion-icon name="arrow-down-outline"></ion-icon>';
-    }
+  // SET UNIQUE INSTRUCITONS AND BUTTONS DEPENDING ON GAME
+  setInstructionsAndButtons(
+    upInstruction,
+    downInstruction,
+    upButton,
+    downButton
+  ) {
+    this.upInstructionEl.innerHTML = upInstruction;
+    this.downInstructionEl.innerHTML = downInstruction;
+    this.upBtnEl.innerHTML = upButton;
+    this.downBtnEl.innerHTML = downButton;
   }
-
   ////////////////////////////////////////////////////////////////
   // EVENT LISTENERS
   attachListeners() {
@@ -126,6 +120,7 @@ export default class Game {
     // 1b) CALL checkClicked FN WITH ARGUMENTS FOR CHECKING BTNS
     this.checkClicked(btn.id, "pause-btn", "speed-btn");
   }
+
   listenToKeys(e) {
     // 2a) prevent default to avoid bug when clicking pause btn and then spacebar
     e.preventDefault();
@@ -136,33 +131,13 @@ export default class Game {
 
   // CHECK WHAT BTN/KEY WAS CLICKED ON
   checkClicked(clicked, pause, speed) {
-    //1) CHECK PAUSE BTN/KEY (return to stop function going forward)
-    if (clicked === pause) return this.pauseGame();
-
-    //2)CHECK IF GAME IS PAUSED
-    if (!this.isPaused) {
-      //3) CHECK SPEED BTN/KEY
-      if (clicked === speed) this.changeSpeed();
-      else {
-        // 4) GET STRING FOR SELECTED DIRECTION AND PUT CORRECT DIRECTION BASED ON CLICKED ELEMENT
-        let selectedDirection;
-
-        if (this.#upMovementControls.includes(clicked))
-          selectedDirection = "up";
-        else if (this.#leftMovementControls.includes(clicked))
-          selectedDirection = "left";
-        else if (this.#downMovementControls.includes(clicked))
-          selectedDirection = "down";
-        else if (this.#rightMovementControls.includes(clicked))
-          selectedDirection = "right";
-        else return;
-
-        this.#handleGameControlsFn(selectedDirection);
-      }
-    }
+    //1) CHECK PAUSE AND SPEED BTN/KEY
+    if (clicked === pause) this.pauseGame();
+    if (clicked === speed) this.changeSpeed();
+    // REST IS DEFINED IN CHILD CLASS
   }
 
-  // PAUSE ( maybe option to leave game (maybe save state in cookies))
+  // PAUSE
   pauseGame() {
     // 1) TOGGLE OVERLAY AND PAUSE SCREEN
     this.#pauseEl.classList.toggle("hidden");
@@ -174,67 +149,66 @@ export default class Game {
   // SPEED
   changeSpeed() {
     // 1) CHANGE SPEED (NORMAL <-> FAST)
-    this.#fastSpeed = !this.#fastSpeed;
+    this.#ifFastSpeed = !this.#ifFastSpeed;
     // 2) CHANGE ICON FOR BUTTON
-    this.#speedBtnEl.innerHTML = this.#fastSpeed
+    this.#speedBtnEl.innerHTML = this.#ifFastSpeed
       ? `<ion-icon name="play-forward-circle-outline"></ion-icon>`
       : `<ion-icon name="play-circle-outline"></ion-icon>`;
-
     //  3) GET NEW SPEED AND RESTART SETINTERVAL GAME FUNCTION
-    const currentSpeed = this.#fastSpeed ? FAST_SPEED : NORMAL_SPEED;
+    const currentSpeed = this.#ifFastSpeed ? FAST_SPEED : NORMAL_SPEED;
     this.startGame(currentSpeed);
   }
 
   ////////////////////////////////////////////////////////////////
   // GAME
+
+  //NEEDS TO BE DEFINED IN CHILD CLASS
+  handleMovement() {}
+
   startGame(speed) {
     //  1)  REMOVE EXISTING SETINTERVAL FOR CHANGING SPEED
     if (this.#gameIntervalFunction) clearInterval(this.#gameIntervalFunction);
-
     //  2) START NEW SETINTERVAL WITH NEW SPEED
     this.#gameIntervalFunction = setInterval(
-      this.#handleGameMovementFn,
+      this.handleMovement.bind(this),
       speed * 1000
     );
   }
+
   endGame() {
     // 1) REMOVE ALL LISTENERS
     this.#controlsEl.removeEventListener("click", this.boundListenToControls);
     window.removeEventListener("keydown", this.boundListenToKeys);
-
     this.#pauseEl.removeEventListener("click", this.boundPauseGame);
     this.#overlayEl.removeEventListener("click", this.boundPauseGame);
 
     // 2) CLEAR SETINTERVAL FUNCTION
     clearInterval(this.#gameIntervalFunction);
 
-    // 3) CHECK HIGHSCORE
+    // 2) CHECK HIGHSCORE
     const highscore = localStorage.getItem(`${this.game}-highscore`)
       ? localStorage.getItem(`${this.game}-highscore`)
       : 0;
-
     let newHighscore = false;
-
     if (this.score > highscore) {
       localStorage.setItem(`${this.game}-highscore`, this.score);
       document.getElementById(`${this.game}-highscore`).innerHTML = this.score;
       newHighscore = true;
     }
-    // 4) TAKE CARE OF CSS CLASSESS AND HTML
+
+    // 3) TAKE CARE OF CSS CLASSESS AND HTML
     this.#mapEl.classList.remove(`${this.game}-map`);
     this.toggleHidden();
-
     let gameOverMessage = newHighscore
       ? `CONGRATULATIONS, YOU SET NEW HIGHSCORE FOR ${this.game.toUpperCase()}: ${
           this.score
         }`
       : `YOUR SCORE IN ${this.game.toUpperCase()}: ${this.score}`;
-
     this.#gameOverEl.innerHTML = `!GAME OVER! <br> !${gameOverMessage}!`;
 
-    // 5) SET VALUES BACK TO DEFAULT
+    // 4) SET VALUES BACK TO DEFAULT
     this.score = 0;
     this.isPaused = false;
-    this.#fastSpeed = false;
+    this.#ifFastSpeed = false;
   }
 }
