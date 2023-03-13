@@ -78,7 +78,10 @@ export default class Snake extends Game {
     this.moveSnake();
 
     // 3) CHECK IF GAME OVER AND STOP REST OF THE FUNCTION IF SO
-    if (this.checkIfGameOver()) return;
+    if (this.checkIfGameOver()) {
+      this.endGame();
+      return;
+    }
 
     // 4) CHECK IF SNAKE ATE APPLE
     this.checkIfAteApple();
@@ -134,8 +137,6 @@ export default class Snake extends Game {
       +y < 0 ||
       headlessSnake.includes(this.#snake[0])
     ) {
-      // 4c) END GAME
-      this.endGame();
       return true;
     }
     return false;
@@ -148,6 +149,8 @@ export default class Snake extends Game {
     this.#apple = undefined;
     this.#direction = "right";
     this.#snakeNeckDirection = "left";
+    // 2) CLEAR STYLES
+    this.clearDisabledButtonStyles();
   }
   ////////////////////////////////////////////////////////////////
   // POSITION X,Y
@@ -196,9 +199,7 @@ export default class Snake extends Game {
   setInstructionsAndButtons() {
     super.setInstructionsAndButtons(
       "MOVE UP",
-      "MOVE DOWN",
-      '<ion-icon name="arrow-up-outline"></ion-icon>',
-      '<ion-icon name="arrow-down-outline"></ion-icon>'
+      '<ion-icon name="arrow-up-outline"></ion-icon>'
     );
   }
 
@@ -225,13 +226,16 @@ export default class Snake extends Game {
 
   setDisabledButtonStyle() {
     // 1) REMOVE DISABLED CLASS FROM ALL BUTTONS
-    this.#allButtonEl.forEach((el) => {
-      el.classList.remove("controls-disabled");
-    });
+    this.clearDisabledButtonStyles();
     // 2) ADD DISABLED CLASS TO BUTTON IN SNAKENECK DIRECTION
     document
       .getElementById(`${this.#snakeNeckDirection}-btn`)
       .classList.add("controls-disabled");
+  }
+  clearDisabledButtonStyles() {
+    this.#allButtonEl.forEach((el) => {
+      el.classList.remove("controls-disabled");
+    });
   }
 
   setSnakeArrowIcon() {

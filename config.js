@@ -1,7 +1,7 @@
 "use strict";
 
-export const NORMAL_SPEED = 0.6;
-export const FAST_SPEED = 0.3;
+export const NORMAL_SPEED = 0.5;
+export const FAST_SPEED = 0.2;
 
 export const SNAKE = "snake";
 export const SNAKE_X = 10;

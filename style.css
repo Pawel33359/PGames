@@ -149,7 +149,7 @@ button {
 }
 .game-map {
   display: grid;
-  margin-top: 6.4rem;
+  margin-top: 4.8rem;
   border: 5px solid #343a40;
 
   box-shadow: 0 0 8rem 3rem #1a4d23;
@@ -235,9 +235,10 @@ button {
 
 /* TETRIS */
 .tetris-map {
-  /* grid-template-columns: repeat(10, 1fr); */
   grid-template-columns: repeat(10, 3.5rem);
   grid-template-rows: repeat(20, 3.5rem);
+  margin-left: 4rem;
+  margin-right: 4rem;
 }
 
 /* TETRIS COLORS*/
@@ -371,11 +372,6 @@ button {
       box-shadow: 0 0 5rem 1rem #1a4d23;
     }
   }
-  /* #game {
-    display: flex;
-    flex-direction: column;
-    gap: 3.6rem;
-  } */
   .menu-games {
     width: 90%;
   }
@@ -421,6 +417,12 @@ button {
     grid-template-columns: repeat(10, 4rem);
     grid-template-rows: repeat(10, 4rem);
   }
+  .tetris-map {
+    grid-template-columns: repeat(10, 3rem);
+    grid-template-rows: repeat(20, 3rem);
+    margin-left: 6rem;
+    margin-right: 6rem;
+  }
   .controls-description {
     display: none;
   }
@@ -447,11 +449,26 @@ button {
   .score {
     font-size: 3.6rem;
   }
+  .tetris-map {
+    grid-template-columns: repeat(10, 2.5rem);
+    grid-template-rows: repeat(20, 2.5rem);
+    margin-left: 8rem;
+    margin-right: 8rem;
+  }
 }
 
-/*Phone sizes sideways*/
-/*448px height*/
-@media (max-height: 30em) {
+/* Phone sizes sideways*/
+/* 832px height*/
+@media (max-height: 52em) {
+  .tetris-map {
+    grid-template-columns: repeat(10, 2.5rem);
+    grid-template-rows: repeat(20, 2.5rem);
+    margin-left: 12rem;
+    margin-right: 12rem;
+  }
+}
+/*516px height*/
+@media (max-height: 32em) {
   #menu {
     padding: 1.2rem;
   }
@@ -472,6 +489,9 @@ button {
     font-size: 2.4rem;
     padding: 1.2rem;
   }
+  .game-map {
+    margin-top: 0.8rem;
+  }
   .game-screen {
     margin-right: 16rem;
   }
@@ -481,15 +501,23 @@ button {
     display: flex;
   }
   .controls-buttons {
+    display: flex;
     flex-grow: 1;
     flex-direction: row;
     margin: auto 2.4rem;
     justify-content: space-between;
     align-items: center;
   }
+  .controls-keys {
+    display: none;
+  }
   .snake-map {
     grid-template-columns: repeat(10, 3.5rem);
     grid-template-rows: repeat(10, 3.5rem);
+  }
+  .tetris-map {
+    grid-template-columns: repeat(10, 1.75rem);
+    grid-template-rows: repeat(20, 1.75rem);
   }
   .controls-description {
     display: none;
@@ -502,11 +530,35 @@ button {
     grid-template-columns: repeat(10, 2.5rem);
     grid-template-rows: repeat(10, 2.5rem);
   }
+  .tetris-map {
+    grid-template-columns: repeat(10, 1.75rem);
+    grid-template-rows: repeat(20, 1.75rem);
+  }
   .controls-btn {
     font-size: 3rem;
     padding: 1.4rem;
   }
   .game-screen {
     margin-right: 12rem;
+  }
+}
+
+/* 944px width and height AND */
+@media (max-height: 59em) and (max-width: 59em) {
+  .tetris-map {
+    grid-template-columns: repeat(10, 2rem);
+    grid-template-rows: repeat(20, 2rem);
+    margin-left: 12rem;
+    margin-right: 12rem;
+  }
+}
+/*944px width and 656px height*/
+@media (max-height: 41em) and (max-width: 59em) {
+  html {
+    /* 1rem  = 8px*/
+    font-size: 50%;
+  }
+  .game-map {
+    margin-top: 0.2rem;
   }
 }

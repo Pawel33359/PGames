@@ -30,9 +30,7 @@ export default class Game {
   #gameOverEl = document.querySelector(".menu-game-over");
 
   upInstructionEl = document.getElementById("up-instruction");
-  downInstructionEl = document.getElementById("down-instruction");
   upBtnEl = document.getElementById("up-btn");
-  downBtnEl = document.getElementById("down-btn");
 
   constructor(x, y, game) {
     // 1) GET MAP SIZE AND SHAPE TO BE GENERATED
@@ -85,16 +83,9 @@ export default class Game {
   }
 
   // SET UNIQUE INSTRUCITONS AND BUTTONS DEPENDING ON GAME
-  setInstructionsAndButtons(
-    upInstruction,
-    downInstruction,
-    upButton,
-    downButton
-  ) {
+  setInstructionsAndButtons(upInstruction, upButton) {
     this.upInstructionEl.innerHTML = upInstruction;
-    this.downInstructionEl.innerHTML = downInstruction;
     this.upBtnEl.innerHTML = upButton;
-    this.downBtnEl.innerHTML = downButton;
   }
   ////////////////////////////////////////////////////////////////
   // EVENT LISTENERS
@@ -198,7 +189,11 @@ export default class Game {
 
     // 3) TAKE CARE OF CSS CLASSESS AND HTML
     this.#mapEl.classList.remove(`${this.game}-map`);
+    this.#mapEl.innerHTML = "";
     this.toggleHidden();
+
+    this.#speedBtnEl.innerHTML = `<ion-icon name="play-circle-outline"></ion-icon>`;
+
     let gameOverMessage = newHighscore
       ? `CONGRATULATIONS, YOU SET NEW HIGHSCORE FOR ${this.game.toUpperCase()}: ${
           this.score
